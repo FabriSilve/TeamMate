@@ -11,3 +11,5 @@
 
 ## Create sha256 hash
 `shasum -a 256 team-mate.tar.gz | awk '{printf $1}' | pbcopy`
+
+ 
