@@ -117,14 +117,14 @@ while getopts t:b:fuws option; do
   esac
 done
 
-echo "Test"
-echo ""
-echo "title: $PR_TITLE"
-echo "branches: $PR_BRANCHES"
-echo "force: $PUSH_FORCE"
-echo "update: $UPDATE"
-echo "notify: $NOTIFY"
-echo "autor: $AUTHOR"
-echo "git email: $GIT_EMAIL"
+# echo "Test"
+# echo ""
+# echo "title: $PR_TITLE"
+# echo "branches: $PR_BRANCHES"
+# echo "force: $PUSH_FORCE"
+# echo "update: $UPDATE"
+# echo "notify: $NOTIFY"
+# echo "autor: $AUTHOR"
+# echo "git email: $GIT_EMAIL"
 
 exit 1
