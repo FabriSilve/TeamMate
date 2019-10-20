@@ -32,26 +32,24 @@ then
   echo "Team Mate Tool"
   echo ""
   echo "You can use this script to quickly open and share pull request(s) for your project with your team."
-  echo "Note: This script is depending on 'hub', 'git' and 'curl'."
-  echo "By default the command does a normal push to the server creating a pull request on 'master' branch"
-  echo "using the last commit message as pull request tile and adding a label with the name of the branch."
+  echo "By default the command does a normal push to the server creating a pull request on 'master' branch using the last commit message as pull request tile and adding a label with the name of the branch."
   echo "The default values can be overriden with a config file in the current folder."
-  echo "If in the configuration file are defined the notification formatter and hook, a post request is done"
-  echo "to share the pull request info with the team."
+  echo "If in the configuration file the notification formatter and hook are defined, a post request is done to share the pull request info with the team."
   echo ""
   echo "Options:"
   echo " -f              : Force push to the server."
   echo ""
   echo " -t \"new title\"  : Set the title used for the pull request and the notification."
   echo ""
-  echo " - b \"brA( brB)\" : Set the destination branch(es). It uses space as separator."
+  echo " -b \"brA( brB)\"  : Set the destination branch(es). It uses space as separator."
   echo ""
-  echo " - u             : Skip the pull request(s) creation and fetch the first pull"
-  echo "                   request url to send in the notification."
+  echo " -u              : Skip the pull request(s) creation and fetch the first pull request url to send in the notification."
   echo ""
-  echo " - s             : Silence the notification."
+  echo " -s              : Silence the notification."
   echo ""
-  echo " - w             : Add a 'WIP' label to the pull request(s) created"
+  echo " -w              : Add a 'WIP' label to the pull request(s) created"
+  echo ""
+  echo "Note: This script is depending on 'hub', 'git' and 'curl'."
   echo ""
   exit 1
 fi
@@ -80,26 +78,13 @@ fi
 # Defaults
 PR_TITLE=$(git log --oneline -n 1 | sed 's;^[0-9a-zA-Z]*[\ ]*;;')
 PR_BRANCHES="master"
+
 PUSH_FORCE=0
-ONLY_UPDATE=0
+UPDATE=0
 WIP=0
-SILENCE=0
+NOTIFY=0
 
-AUTHOR=$(git log -n 1 | grep Author | sed 's/Author:\ //' | sed 's/\<.*//')
-GIT_EMAIL=$(git log -n 1 | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
-
-# Inputs
-while getopts t:b:fuws option; do
-  case "${option}" in
-    t) PR_TITLE=${OPTARG};;
-    b) PR_BRANCHES=${OPTARG};;
-    f) PUSH_FORCE=1;;
-    u) ONLY_UPDATE=1;;
-    w) WIP=1;;
-    s) SILENCE=1;;
-  esac
-done
-
+# Load config file
 if [ -e ./.team ]
 then
     step "Found config file"
@@ -109,6 +94,37 @@ then
     then
       PR_BRANCHES=$DEFAULT_BRANCH
     fi
+
+    if [ -n "$NOTIFICATION_HOOK" ] && [ "$(type -t FORMATTER)" == 'function' ]
+    then
+      NOTIFY=1
+    fi
 fi
+
+# User data
+AUTHOR=$(git log -n 1 | grep Author | sed 's/Author:\ //' | sed 's/\<.*//')
+GIT_EMAIL=$(git log -n 1 | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
+
+# Inputs
+while getopts t:b:fuws option; do
+  case "${option}" in
+    t) PR_TITLE=${OPTARG};;
+    b) PR_BRANCHES=${OPTARG};;
+    f) PUSH_FORCE=1;;
+    u) UPDATE=1;;
+    w) WIP=1;;
+    s) NOTIFY=0;;
+  esac
+done
+
+echo "Test"
+echo ""
+echo "title: $PR_TITLE"
+echo "branches: $PR_BRANCHES"
+echo "force: $PUSH_FORCE"
+echo "update: $UPDATE"
+echo "notify: $NOTIFY"
+echo "autor: $AUTHOR"
+echo "git email: $GIT_EMAIL"
 
 exit 1
