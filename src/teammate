@@ -9,12 +9,11 @@ err(){
 
 step(){
   echo ""
-  echo "$1..."
+  echo "Step: $1..."
   echo ""
 }
 
 warn(){
-  echo ""
   echo "Warning: $1"
   echo ""
 }
@@ -64,15 +63,12 @@ fi
 # Check dependencies
 if ! [ -x "$(command -v hub)" ]; then
   err 'Error: hub is not installed.'
-  exit 1
 fi
 if ! [ -x "$(command -v git)" ]; then
   err 'Error: git is not installed.'
-  exit 1
 fi
 if ! [ -x "$(command -v curl)" ]; then
   err 'Error: curl is not installed.'
-  exit 1
 fi
 
 # Defaults
@@ -133,5 +129,43 @@ else
 fi
 
 step "Branch successfully pushed"
+
+PR_URL=""
+MESSAGE=""
+
+if [ "$UPDATE" = "1" ]
+then
+  # Update pr(s)
+  PR_URL=$(hub pr show -u)
+  MESSAGE="I updated my pull request. Can you review again?"
+else
+  # Opening pr(s)
+  for branch in $PR_BRANCHES
+  do
+    if [ "$WIP" = "1" ]
+    then
+      PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l $branch,WIP)
+      MESSAGE="I opened a WIP pull request. Can you give me an early feedback?"
+    else
+      PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l $branch)
+      MESSAGE="Can you review my new pull request?"
+    fi
+  done
+fi
+
+success "Pull request(s) correctly syncronized"
+
+# Send Notification
+if [ "$NOTIFY" = "1" ]
+then
+  FORMATTER "$AUTHOR" "$MESSAGE" "$PR_URL" "$PR_TITLE"
+  curl -X POST \
+    $NOTIFICATION_HOOK \
+    -H 'Content-Type: application/json' \
+    -H 'cache-control: no-cache' \
+    -d "$NOTIFICATION"
+
+  success "Slack notification sent!"
+fi
 
 exit 1
