@@ -117,14 +117,21 @@ while getopts t:b:fuws option; do
   esac
 done
 
-# echo "Test"
-# echo ""
-# echo "title: $PR_TITLE"
-# echo "branches: $PR_BRANCHES"
-# echo "force: $PUSH_FORCE"
-# echo "update: $UPDATE"
-# echo "notify: $NOTIFY"
-# echo "autor: $AUTHOR"
-# echo "git email: $GIT_EMAIL"
+# Pushing the branch
+if [ "$PUSH_FORCE" = "0" ]
+then
+  if ! git push -u
+  then
+    err "Cannot push the branch! Do you need to push force?"
+  fi
+else
+  warn "Force pushing the branch"
+  if ! git push -f
+  then
+    err "Cannot push the branch!"
+  fi
+fi
+
+step "Branch successfully pushed"
 
 exit 1
