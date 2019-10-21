@@ -23,13 +23,13 @@
 ## Intallation
 > Run the following script in your terminal to install the Formula locally
 
-```
+```console
 brew create https://github.com/FabriSilve/TeamMate/raw/master/teammate-1.2.tar.gz --set-name teammate
 ```
 
 > In the file automatically opened in your default text editor paste the following code
 
-```
+```ruby
 class Teammate < Formula
   desc "A script to create and share faster github pull requests in your team"
   homepage "https://fabrisilve.github.io/TeamMate/"
@@ -54,7 +54,8 @@ end
 - FORMATTER(): A method that receive author, message, pull request url and title. It has to set the variable NOTIFICATION with the JSON string to send in the request.
 
 > Example of `.team` file
-```
+
+```shell
 DEFAULT_BRANCH="production"
 NOTIFICATION_HOOK="https://hooks.slack.com/services/<TOKEN>"
 
@@ -78,13 +79,12 @@ FORMATTER(){
 > https://rubydoc.brew.sh/Formula
 
 #### Create archive folder
-```
+```console
 tar -zcvf team-mate.tar.gz src
 ```
 
 #### Create sha256 hash
-```
+```console
 shasum -a 256 team-mate.tar.gz | awk '{printf $1}' | pbcopy
 ```
-
  
