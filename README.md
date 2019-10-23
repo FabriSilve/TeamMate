@@ -25,7 +25,7 @@
 ## Intallation
 > Run the following script in your terminal to install the Formula locally
 
-```console
+```sh
 brew create https://github.com/FabriSilve/TeamMate/raw/master/teammate-1.2.tar.gz --set-name teammate
 ```
 
@@ -89,12 +89,12 @@ FORMATTER(){
 > https://rubydoc.brew.sh/Formula
 
 #### Create archive folder
-```console
+```sh
 tar -zcvf team-mate.tar.gz src
 ```
 
 #### Create sha256 hash
-```console
+```sh
 shasum -a 256 team-mate.tar.gz | awk '{printf $1}' | pbcopy
 ```
  
