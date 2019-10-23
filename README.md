@@ -10,7 +10,7 @@
 >>
 >> **-t "new title"**  : Set the title used for the pull request and the notification.
 >>
->> **-b "brA( brB)"**  : Set the destination branch(es). It uses space as separator.
+>> **-b "brA [brB]"**  : Set the destination branch(es). It uses space as separator.
 >>
 >> **-u**              : Skip the pull request(s) creation and fetch the first pull request url to send in the notification.
 >>
@@ -46,6 +46,8 @@ class Teammate < Formula
   end
 end
 ```
+
+> Then run `brew install teammate`
 
 > The config file has to be called `.team` and it need to be created in the folder where the script is called.
 > The Defaults field overridable are:
