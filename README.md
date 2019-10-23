@@ -20,6 +20,8 @@
 >
 > *Note: This script is depending on 'hub', 'git' and 'curl'.*
 
+---
+
 ## Intallation
 > Run the following script in your terminal to install the Formula locally
 
@@ -47,7 +49,13 @@ class Teammate < Formula
 end
 ```
 
-> Then run `brew install teammate`
+> Finally to install the new formula you have to use homebrew and enjoy
+```sh
+brew install teammate
+```
+
+---
+## Configuration file
 
 > The config file has to be called `.team` and it need to be created in the folder where the script is called.
 > The Defaults field overridable are:
