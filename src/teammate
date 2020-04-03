@@ -136,6 +136,7 @@ if [ "$UPDATE" = "1" ]
 then
   # Update pr(s)
   PR_URL=$(hub pr show -u)
+  if [ "$?" = "1" ]; then err "Could not find any existing pull request. Should you try without the -u option?"; fi
   MESSAGE="I updated my pull request. Can you review again?"
 else
   # Opening pr(s)
@@ -144,15 +145,17 @@ else
     if [ "$WIP" = "1" ]
     then
       PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l $branch,WIP)
+      if [ "$?" = "1" ]; then err "Could not open a pull request to $branch. Did you forget to use the -u or -b option?"; fi
       MESSAGE="I opened a WIP pull request. Can you give me an early feedback?"
     else
       PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l $branch)
+      if [ "$?" = "1" ]; then err "Could not open a pull request to $branch. Did you forget to use the -u or -b option?"; fi
       MESSAGE="Can you review my new pull request?"
     fi
   done
 fi
 
-success "Pull request(s) correctly syncronized"
+step "Pull request(s) correctly syncronized"
 
 # Send Notification
 if [ "$NOTIFY" = "1" ]
@@ -164,7 +167,7 @@ then
     -H 'cache-control: no-cache' \
     -d "$NOTIFICATION"
 
-  success "Slack notification sent!"
+  step "Slack notification sent!"
 fi
 
 exit 1
