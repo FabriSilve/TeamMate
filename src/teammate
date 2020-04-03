@@ -49,14 +49,14 @@ then
   echo ""
   echo "Note: This script is depending on 'hub', 'git' and 'curl'."
   echo ""
-  exit 1
+  exit 0
 fi
 
 ## Version
 if [ "$1" = "--version" ] || [ "$1" = "-v" ]
 then
   echo "teammate v1.1"
-  exit 1
+  exit 0
 fi
 
 # Check dependencies
@@ -170,4 +170,4 @@ then
   step "Slack notification sent!"
 fi
 
-exit 1
+exit 0
