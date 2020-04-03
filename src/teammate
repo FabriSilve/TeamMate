@@ -161,12 +161,13 @@ step "Pull request(s) correctly syncronized"
 if [ "$NOTIFY" = "1" ]
 then
   FORMATTER "$AUTHOR" "$MESSAGE" "$PR_URL" "$PR_TITLE"
-  curl -X POST \
+  curl -f -X POST \
     $NOTIFICATION_HOOK \
     -H 'Content-Type: application/json' \
     -H 'cache-control: no-cache' \
     -d "$NOTIFICATION"
 
+  if [ "$?" != "0" ]; then err "Could not send notification to slack. You should check your config file."; fi
   step "Slack notification sent!"
 fi
 
