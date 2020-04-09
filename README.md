@@ -90,11 +90,11 @@ FORMATTER(){
 
 #### Create archive folder
 ```sh
-tar -zcvf team-mate.tar.gz src
+tar -zcvf teammate-X.X.tar.gz src
 ```
 
 #### Create sha256 hash
 ```sh
-shasum -a 256 team-mate.tar.gz | awk '{printf $1}' | pbcopy
+shasum -a 256 teammate-X.X.tar.gz | awk '{printf $1}' | pbcopy
 ```
  
