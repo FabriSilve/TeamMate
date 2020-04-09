@@ -167,8 +167,8 @@ then
     -H 'cache-control: no-cache' \
     -d "$NOTIFICATION"
 
-  if [ "$?" != "0" ]; then err "Could not send notification to slack. You should check your config file."; fi
-  step "Slack notification sent!"
+  if [ "$?" != "0" ]; then err "Could not send notification. You should check your config file."; fi
+  step "Notification sent!"
 fi
 
 exit 0
