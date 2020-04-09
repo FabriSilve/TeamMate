@@ -27,7 +27,7 @@ warn(){
 if [ "$1" = "--help" ] || [ "$1" = "-h" ]
 then
   echo ""
-  echo "${GREEN}Team Mate 🍻${NO_COLOR}"
+  echo -e "${GREEN}Team Mate 🍻${NO_COLOR}"
   echo ""
   echo "You can use this script to quickly open and share pull request(s) for your project with your team."
   echo "By default the command does a normal push to the server creating a pull request on 'master' branch using the last commit message as pull request tile and adding a label with the name of the branch."
@@ -49,7 +49,7 @@ then
   echo ""
   echo "Note: This script is depending on 'hub', 'git' and 'curl'."
   echo ""
-  echo "${GREEN}Developed with ♥️ (and ☕️)${NO_COLOR}"
+  echo -e "${GREEN}Developed with ♥️ (and ☕️)${NO_COLOR}"
   echo "Repository: https://github.com/FabriSilve/TeamMate"
   echo ""
   exit 0
@@ -58,7 +58,7 @@ fi
 ## Version
 if [ "$1" = "--version" ] || [ "$1" = "-v" ]
 then
-  echo "${GREEN}teammate v1.4${NO_COLOR}"
+  echo -e "${GREEN}teammate v1.4.1${NO_COLOR}"
   exit 0
 fi
 
