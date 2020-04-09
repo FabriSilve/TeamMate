@@ -58,7 +58,7 @@ fi
 ## Version
 if [ "$1" = "--version" ] || [ "$1" = "-v" ]
 then
-  echo "${GREEN}teammate v1.3${NO_COLOR}"
+  echo "${GREEN}teammate v1.4${NO_COLOR}"
   exit 0
 fi
 
