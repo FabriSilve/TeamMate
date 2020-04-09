@@ -26,7 +26,7 @@
 > Run the following script in your terminal to install the Formula locally
 
 ```sh
-brew create https://github.com/FabriSilve/TeamMate/raw/master/teammate-1.2.tar.gz --set-name teammate
+brew create https://github.com/FabriSilve/TeamMate/raw/master/teammate-1.3.tar.gz --set-name teammate
 ```
 
 > In the file automatically opened in your default text editor paste the following code
