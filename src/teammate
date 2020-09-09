@@ -168,7 +168,7 @@ then
     $NOTIFICATION_HOOK \
     -H 'Content-Type: application/json' \
     -H 'cache-control: no-cache' \
-    -d "$NOTIFICATION"
+    -d "$NOTIFICATION" > /dev/null 2>&1
 
   if [ "$?" != "0" ]; then err "Could not send notification. You should check your config file."; fi
   step "Notification sent!"
