@@ -66,7 +66,7 @@ fi
 DEPENDENCIES='hub git curl'
 for dep in $DEPENDENCIES; do
 	if ! [ -x "$(command -v $dep)" ]; then
-  	err "Error: $dep is not installed."
+  	err "$dep is not installed."
 	fi
 done
 
