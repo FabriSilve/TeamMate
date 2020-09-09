@@ -63,15 +63,12 @@ then
 fi
 
 # Check dependencies
-if ! [ -x "$(command -v hub)" ]; then
-  err 'Error: hub is not installed.'
-fi
-if ! [ -x "$(command -v git)" ]; then
-  err 'Error: git is not installed.'
-fi
-if ! [ -x "$(command -v curl)" ]; then
-  err 'Error: curl is not installed.'
-fi
+DEPENDENCIES='hub git curl'
+for dep in $DEPENDENCIES; do
+	if ! [ -x "$(command -v $dep)" ]; then
+  	err "Error: $dep is not installed."
+	fi
+done
 
 # Defaults
 PR_TITLE=$(git log --oneline -n 1 | sed 's;^[0-9a-zA-Z]*[\ ]*;;')
@@ -100,8 +97,9 @@ then
 fi
 
 # User data
-AUTHOR=$(git log -n 1 | grep Author | sed 's/Author:\ //' | sed 's/\<.*//')
-GIT_EMAIL=$(git log -n 1 | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
+USR_DATA=$(git log -n 1 | grep Author)
+AUTHOR=$(echo $USR_DATA | sed 's/Author:\ //' | sed 's/\<.*//')
+GIT_EMAIL=$(echo $USR_DATA | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
 
 # Inputs
 while getopts t:b:fuws option; do
