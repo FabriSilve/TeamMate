@@ -36,6 +36,21 @@ brew upgrade https://github.com/FabriSilve/TeamMate/raw/master/teammate.rb
 ```
 
 ---
+
+## Credentials for hub
+> TeamMate is using **hub** to comunicate with the GitHub api. To allow that without issues, you need to create an access token from your GitHub profile. All the steps are properly explained in the [official guide](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token).
+>> The minimun permissions are all the one in the **repo** category. 
+
+> After creating the access token, you need to create the **hub**'s configuration file in *~/.config/hub* with the following content
+
+```
+github.com:
+- user: YOUR_GITHUB_USERNAME
+  oauth_token: YOUR_AUTHENTICATION_TOKEN
+  protocol: https
+```
+
+---
 ## Configuration file
 
 > The config file has to be called `.team` and it need to be created in the folder where the script is called.
