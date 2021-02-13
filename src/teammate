@@ -26,32 +26,24 @@ warn(){
 # Help
 if [ "$1" = "--help" ] || [ "$1" = "-h" ]
 then
-  echo ""
-  echo -e "${GREEN}Team Mate 🍻${NO_COLOR}"
-  echo ""
-  echo "You can use this script to quickly open and share pull request(s) for your project with your team."
-  echo "By default the command does a normal push to the server creating a pull request on 'master' branch using the last commit message as pull request tile and adding a label with the name of the branch."
-  echo "The default values can be overriden with a config file in the current folder."
-  echo "If in the configuration file the notification formatter and hook are defined, a post request is done to share the pull request info with the team."
-  echo ""
-  echo "Options:"
-  echo " -f              : Force push to the server."
-  echo ""
-  echo " -t \"new title\"  : Set the title used for the pull request and the notification."
-  echo ""
-  echo " -b \"brA( brB)\"  : Set the destination branch(es). It uses space as separator."
-  echo ""
-  echo " -u              : Skip the pull request(s) creation and fetch the first pull request url to send in the notification."
-  echo ""
-  echo " -s              : Silence the notification."
-  echo ""
-  echo " -w              : Add a 'WIP' label to the pull request(s) created"
-  echo ""
-  echo "Note: This script is depending on 'hub', 'git' and 'curl'."
-  echo ""
-  echo -e "${GREEN}Developed with ♥️ (and ☕️)${NO_COLOR}"
-  echo "Repository: https://github.com/FabriSilve/TeamMate"
-  echo ""
+  echo -e \
+	"\n${GREEN}Team Mate 🍻${NO_COLOR}\n
+  You can use this script to quickly open and share pull request(s) for your project with your team.
+  By default the command does a normal push to the server creating a pull request on 'master' branch using the last commit message as pull request tile and adding a label with the name of the branch.
+  The default values can be overriden with a config file in the current folder.
+  If in the configuration file the notification formatter and hook are defined, a post request is done to share the pull request info with the team.\n
+  Options:
+   -f              : Force push to the server.\n
+   -t \"new title\"  : Set the title used for the pull request and the notification.\n
+   -b \"brA( brB)\"  : Set the destination branch(es). It uses space as separator.\n
+   -u              : Skip the pull request(s) creation and fetch the first pull request url to send in the notification.\n
+   -s              : Silence the notification.\n
+   -w              : Add a 'WIP' label to the pull request(s) created\n
+   -h              : Print this help.\n
+  Note: This script is depending on 'hub', 'git' and 'curl'.\n
+  ${GREEN}Developed with ♥️ (and ☕️)${NO_COLOR}
+  Repository: https://github.com/FabriSilve/TeamMate\n"
+
   exit 0
 fi
 
@@ -63,15 +55,12 @@ then
 fi
 
 # Check dependencies
-if ! [ -x "$(command -v hub)" ]; then
-  err 'Error: hub is not installed.'
-fi
-if ! [ -x "$(command -v git)" ]; then
-  err 'Error: git is not installed.'
-fi
-if ! [ -x "$(command -v curl)" ]; then
-  err 'Error: curl is not installed.'
-fi
+DEPENDENCIES='hub git curl'
+for dep in $DEPENDENCIES; do
+	if ! [ -x "$(command -v $dep)" ]; then
+  	err "$dep is not installed."
+	fi
+done
 
 # Defaults
 PR_TITLE=$(git log --oneline -n 1 | sed 's;^[0-9a-zA-Z]*[\ ]*;;')
@@ -100,8 +89,9 @@ then
 fi
 
 # User data
-AUTHOR=$(git log -n 1 | grep Author | sed 's/Author:\ //' | sed 's/\<.*//')
-GIT_EMAIL=$(git log -n 1 | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
+USR_DATA=$(git log -n 1 | grep Author)
+AUTHOR=$(echo $USR_DATA | sed 's/Author:\ //' | sed 's/\<.*//')
+GIT_EMAIL=$(echo $USR_DATA | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
 
 # Inputs
 while getopts t:b:fuws option; do
@@ -168,7 +158,7 @@ then
     $NOTIFICATION_HOOK \
     -H 'Content-Type: application/json' \
     -H 'cache-control: no-cache' \
-    -d "$NOTIFICATION"
+    -d "$NOTIFICATION" > /dev/null 2>&1
 
   if [ "$?" != "0" ]; then err "Could not send notification. You should check your config file."; fi
   step "Notification sent!"

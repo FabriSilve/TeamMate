@@ -17,6 +17,8 @@
 >> **-s**              : Silence the notification.
 >>
 >> **-w**              : Add a 'WIP' label to the pull request(s) created
+>> 
+>> **-h**							 : Print the help
 >
 > *Note: This script is depending on 'hub', 'git' and 'curl'.*
 
