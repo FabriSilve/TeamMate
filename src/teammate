@@ -39,6 +39,7 @@ then
    -u              : Skip the pull request(s) creation and fetch the first pull request url to send in the notification.\n
    -s              : Silence the notification.\n
    -w              : Add a 'WIP' label to the pull request(s) created\n
+   -T \"team name\" : Add your team label to the pull request(s) created
    -h              : Print this help.\n
   Note: This script is depending on 'hub', 'git' and 'curl'.\n
   ${GREEN}Developed with ♥️ (and ☕️)${NO_COLOR}
@@ -70,6 +71,7 @@ PUSH_FORCE=0
 UPDATE=0
 WIP=0
 NOTIFY=0
+TEAM=''
 
 # Load config file
 if [ -e ./.team ]
@@ -94,7 +96,7 @@ AUTHOR=$(echo $USR_DATA | sed 's/Author:\ //' | sed 's/\<.*//')
 GIT_EMAIL=$(echo $USR_DATA | grep Author | sed 's/[^\<]*\<//' | sed 's/\>.*//')
 
 # Inputs
-while getopts t:b:fuws option; do
+while getopts t:b:fuwsT: option; do
   case "${option}" in
     t) PR_TITLE=${OPTARG};;
     b) PR_BRANCHES=${OPTARG};;
@@ -102,6 +104,7 @@ while getopts t:b:fuws option; do
     u) UPDATE=1;;
     w) WIP=1;;
     s) NOTIFY=0;;
+    T) TEAM=${OPTARG};;
   esac
 done
 
@@ -123,7 +126,18 @@ fi
 step "Branch successfully pushed"
 
 PR_URL=""
-MESSAGE=""
+MESSAGE="Can you review my new pull request?"
+LABELS=""
+
+# Set additional labels
+if [ "$WIP" = "1" ]; then
+  LABELS="$LABELS,WIP"
+  MESSAGE="I opened a WIP pull request. Can you give me an early feedback?"
+fi
+if [ ! -z "$TEAM" ]; then
+  LABELS="$LABELS,$TEAM"
+fi
+
 
 if [ "$UPDATE" = "1" ]
 then
@@ -135,16 +149,8 @@ else
   # Opening pr(s)
   for branch in $PR_BRANCHES
   do
-    if [ "$WIP" = "1" ]
-    then
-      PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l $branch,WIP)
-      if [ "$?" = "1" ]; then err "Could not open a pull request to $branch. Did you forget to use the -u or -b option?"; fi
-      MESSAGE="I opened a WIP pull request. Can you give me an early feedback?"
-    else
-      PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l $branch)
-      if [ "$?" = "1" ]; then err "Could not open a pull request to $branch. Did you forget to use the -u or -b option?"; fi
-      MESSAGE="Can you review my new pull request?"
-    fi
+    PR_URL=$(hub pull-request -m "$PR_TITLE" -b $branch -l "$branch$LABELS")
+    if [ "$?" = "1" ]; then err "Could not open a pull request to $branch. Did you forget to use the -u or -b option?"; fi
   done
 fi
 
