@@ -76,6 +76,14 @@ FORMATTER(){
 }
 ```
 
+## Answers to common problems
+
+#### Install Hub without apt
+Error on Linux distros when trying to intall `hub`
+> Hub package is not pointing to the correct library with apt-install
+Thus you need to install Hub manually from the [latest release](https://github.com/github/hub/releases/tag/v2.14.2)
+Download the archive fitting your computer settings, extract it, and simply move your the `hub` file in your `/usr/bin/` folder
+
 -----
 -----
 
